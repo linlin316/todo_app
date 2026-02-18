@@ -81,7 +81,7 @@ Flask を用いて開発した社内向けタスク／プロジェクト管理�
 
 ## todo_app フォルダ構成
 
-```bash
+```test
 todo_app/
 ├─ run.py                     # Flaskアプリの起動エントリーポイント
 ├─ app/
