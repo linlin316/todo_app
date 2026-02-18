@@ -126,7 +126,7 @@ todo_app/
 └─ instance/
    ├─ app.db                  # SQLiteデータベースファイル
    └─ journals/               # プロジェクト記録テキスト保存先
-
+```
    
 ## 📊 権限モデル
 
@@ -180,3 +180,5 @@ python run.py
 
 ブラウザで：
 http://localhost:5000
+
+```
