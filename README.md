@@ -78,6 +78,54 @@ Flask を用いて開発した社内向けタスク／プロジェクト管理�
 
 ---
 
+
+## todo_app フォルダ構成
+todo_app/
+├─ run.py                     # Flaskアプリの起動エントリーポイント
+├─ app/
+│  ├─ __init__.py             # アプリファクトリ（create_app）定義
+│  ├─ extensions.py           # DBやLoginManagerなど拡張機能の初期化
+│  │
+│  ├─ models/                 # データベースモデル定義
+│  │  ├─ user.py              # ユーザーモデル（認証・権限管理）
+│  │  ├─ project.py           # プロジェクトモデル
+│  │  ├─ project_member.py    # プロジェクトメンバー関連モデル
+│  │  └─ task.py              # タスクモデル（Kanban管理）
+│  │
+│  ├─ blueprints/             # 機能別Blueprint
+│  │  ├─ auth/
+│  │  │  ├─ routes.py         # ログイン・サインアップ等の認証処理
+│  │  │  └─ __init__.py       # auth Blueprint定義
+│  │  │
+│  │  └─ projects/
+│  │     ├─ routes.py         # プロジェクト・タスク・メンバー管理処理
+│  │     └─ __init__.py       # projects Blueprint定義
+│  │
+│  ├─ templates/              # Jinja2テンプレート（画面）
+│  │  ├─ base.html            # 共通レイアウト
+│  │  ├─ auth/
+│  │  │  ├─ login.html        # ログイン画面
+│  │  │  └─ signup.html       # ユーザー登録画面
+│  │  │
+│  │  ├─ projects/
+│  │  │  ├─ list.html         # プロジェクト一覧画面
+│  │  │  └─ members.html      # メンバー管理画面
+│  │  │
+│  │  ├─ tasks/
+│  │  │  ├─ list.html         # タスク看板（Kanban）画面
+│  │  │  └─ create.html       # タスク作成画面
+│  │  │
+│  │  └─ journal/
+│  │     └─ index.html        # プロジェクト記録（ジャーナル）画面
+│  │
+│  └─ static/                 # 静的ファイル（CSS等）
+│     └─ css/
+│
+└─ instance/
+   ├─ app.db                  # SQLiteデータベースファイル
+   └─ journals/               # プロジェクト記録テキスト保存先
+
+   
 ## 📊 権限モデル
 
 ### ■ グローバル権限
