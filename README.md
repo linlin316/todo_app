@@ -106,3 +106,27 @@ Flask を用いて開発した社内向けタスク／プロジェクト管理�
 ```bash
 git clone <your-repo-url>
 cd todo_app
+
+---
+
+仮想環境作成（推奨）
+python -m venv venv
+venv\Scripts\activate
+
+---
+
+依存関係インストール
+pip install -r requirements.txt
+
+---
+
+データベース
+本アプリは SQLite（app.db）を使用しています。
+
+---
+
+起動
+python run.py
+
+ブラウザで：
+http://localhost:5000
