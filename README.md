@@ -83,50 +83,45 @@ Flask を用いて開発した社内向けタスク／プロジェクト管理�
 
 ```test
 todo_app/
-├─ run.py                     # Flaskアプリの起動エントリーポイント
-├─ app/
-│  ├─ __init__.py             # アプリファクトリ（create_app）定義
-│  ├─ extensions.py           # DBやLoginManagerなど拡張機能の初期化
+├─ app/                          # アプリ本体
+│  ├─ __init__.py                 # create_app / Blueprint登録など
+│  ├─ extensions.py               # SQLAlchemy / LoginManager 等の初期化
 │  │
-│  ├─ models/                 # データベースモデル定義
-│  │  ├─ user.py              # ユーザーモデル（認証・権限管理）
-│  │  ├─ project.py           # プロジェクトモデル
-│  │  ├─ project_member.py    # プロジェクトメンバー関連モデル
-│  │  └─ task.py              # タスクモデル（Kanban管理）
+│  ├─ blueprints/                 # 機能別Blueprint
+│  │  ├─ auth/                    # ログイン・サインアップ
+│  │  ├─ projects/                # プロジェクト・タスク・メンバー・ジャーナル
+│  │  └─ admin/                   # 管理者画面（承認など）
 │  │
-│  ├─ blueprints/             # 機能別Blueprint
-│  │  ├─ auth/
-│  │  │  ├─ routes.py         # ログイン・サインアップ等の認証処理
-│  │  │  └─ __init__.py       # auth Blueprint定義
-│  │  │
-│  │  └─ projects/
-│  │     ├─ routes.py         # プロジェクト・タスク・メンバー管理処理
-│  │     └─ __init__.py       # projects Blueprint定義
+│  ├─ models/                     # DBモデル
+│  │  ├─ user.py                  # ユーザー（社員番号・権限・承認）
+│  │  ├─ project.py               # プロジェクト
+│  │  ├─ project_member.py        # プロジェクトメンバー関連
+│  │  └─ task.py                  # タスク（todo/doing/done）
 │  │
-│  ├─ templates/              # Jinja2テンプレート（画面）
-│  │  ├─ base.html            # 共通レイアウト
-│  │  ├─ auth/
-│  │  │  ├─ login.html        # ログイン画面
-│  │  │  └─ signup.html       # ユーザー登録画面
-│  │  │
-│  │  ├─ projects/
-│  │  │  ├─ list.html         # プロジェクト一覧画面
-│  │  │  └─ members.html      # メンバー管理画面
-│  │  │
-│  │  ├─ tasks/
-│  │  │  ├─ list.html         # タスク看板（Kanban）画面
-│  │  │  └─ create.html       # タスク作成画面
-│  │  │
-│  │  └─ journal/
-│  │     └─ index.html        # プロジェクト記録（ジャーナル）画面
+│  ├─ templates/                  # 画面テンプレート（Jinja2）
+│  │  ├─ base.html                # 共通レイアウト
+│  │  ├─ auth/                    # ログイン関連画面
+│  │  ├─ projects/                # プロジェクト関連画面
+│  │  ├─ tasks/                   # タスク関連画面
+│  │  ├─ journal/                 # ジャーナル画面
+│  │  └─ admin/                   # 管理者画面
 │  │
-│  └─ static/                 # 静的ファイル（CSS等）
-│     └─ css/
+│  └─ static/                     # 静的ファイル
+│     └─ css/                     # CSS
 │
-└─ instance/
-   ├─ app.db                  # SQLiteデータベースファイル
-   └─ journals/               # プロジェクト記録テキスト保存先
+├─ instance/                      # 環境依存データ（Git管理外推奨）
+│  ├─ app.db                      # SQLite DB（※運用方針により）
+│  └─ journals/                   # ジャーナル保存先
+│
+├─ run.py                         # 起動スクリプト
+├─ requirements.txt               # 依存ライブラリ
+├─ README.md                      # 説明書
+├─ seed_admin.py                  # 初期管理者作成（必要な場合）
+├─ init_db.py                     # DB初期化
+├─ fix_db.py                      # DB修正補助
+└─ check_users_columns.py         # DB確認用
 ```
+※ `.venv` / `__pycache__` は開発環境で自動生成されるため、フォルダ構成図からは省略しています。
    
 ##  権限モデル
 
