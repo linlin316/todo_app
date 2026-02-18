@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}ユーザー管理{% endblock %}
+
+{% block content %}
+<h1>ユーザー管理</h1>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul style="color:red;">
+      {% for m in messages %}
+        <li>{{ m }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>社員番号</th>
+      <th>名前</th>
+      <th>権限</th>
+      <th>状態</th>
+      <th>作成日</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.employee_id }}</td>
+      <td>{{ u.name }}</td>
+      <td>{{ u.role }}</td>
+      <td>
+      {% if not u.is_approved %}
+      承認待ち
+      {% elif u.is_active %}
+      有効
+      {% else %}
+      停止
+      {% endif %}
+      </td>
+      <td>{{ u.created_at|jst }}</td>
+      <td>
+  <div class="table-actions">
+    <div class="row">
+      <form method="post" action="{{ url_for('admin.change_role', user_id=u.id) }}" class="inline-form">
+        <select name="role">
+          <option value="admin" {{ "selected" if u.role=="admin" }}>admin</option>
+          <option value="leader" {{ "selected" if u.role=="leader" }}>leader</option>
+          <option value="member" {{ "selected" if u.role=="member" }}>member</option>
+        </select>
+        <button type="submit" class="btn btn-dark">変更</button>
+      </form>
+
+      {% if not u.is_approved %}
+        <form method="post" action="{{ url_for('admin.approve_user', user_id=u.id) }}" class="inline-form">
+          <button type="submit" class="btn btn-dark-outline">承認</button>
+        </form>
+      {% else %}
+        <form method="post" action="{{ url_for('admin.toggle_active', user_id=u.id) }}" class="inline-form">
+          <button type="submit" class="btn btn-dark-outline">
+            {{ "停止" if u.is_active else "再開" }}
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+ </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

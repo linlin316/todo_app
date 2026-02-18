@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}ToDo App{% endblock %}</title>
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  
+  <div class="container">
+
+    {% if current_user.is_authenticated %}
+      <div class="topbar">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <a class="nav-btn" href="{{ url_for('projects.list_projects') }}">プロジェクト</a>
+
+          {% if current_user.role == "admin" %}
+           <a class="nav-btn" href="{{ url_for('admin.list_users') }}">
+            ユーザー管理
+          {% if pending_count > 0 %}
+           <span class="badge">{{ pending_count }}</span>
+          {% endif %}
+           </a>
+          {% endif %}
+        </div>
+
+        <div>
+          <a class="nav-btn" href="{{ url_for('dashboard') }}">ダッシュボード</a>
+          <a class="nav-btn nav-btn-logout" href="{{ url_for('auth.logout') }}">ログアウト</a>
+        </div>
+      </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>タスク作成：{{ project.name }}</h2>
+
+<form method="post">
+  <div>
+    <label>タイトル</label><br>
+    <input name="title" required style="width:100%; padding:8px;">
+  </div>
+
+  <div style="margin-top:10px;">
+    <label>説明</label><br>
+    <textarea name="description" style="width:100%; padding:8px;"></textarea>
+  </div>
+
+  <div style="margin-top:10px;">
+    <label>優先度</label><br>
+    <select name="priority" style="padding:8px;">
+      <option value="low">low</option>
+      <option value="mid" selected>mid</option>
+      <option value="high">high</option>
+    </select>
+  </div>
+
+  <div style="margin-top:10px;">
+    <label for="due_date">期限</label>
+    <input
+     id="due_date"
+     name="due_date"
+     type="date"
+     required
+     min="{{ today }}"
+    >
+  </div>
+
+  <div class="form-actions" style="margin-top: 12px;">
+    <button type="submit" class="btn btn-dark">作成</button>
+    <a href="{{ url_for('projects.list_tasks', project_id=project.id) }}" class="btn btn-back">← 戻る</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# database
+*.db
+*.sqlite3
+
+# flask instance (db/journals/secret 常在這)
+instance/
+
+# IDE
+.vscode/
+.idea/

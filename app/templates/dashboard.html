@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}ダッシュボード{% endblock %}
+
+{% block content %}
+<h1>ダッシュボード</h1>
+
+<div class="dash-grid">
+  <a class="dash-card link-card" href="{{ url_for('projects.list_projects') }}">
+    <div class="dash-label">タスク合計</div>
+    <div class="dash-value">{{ total_task_count }}</div>
+  </a>
+
+  <a class="dash-card link-card" href="{{ url_for('projects.list_projects') }}">
+    <div class="dash-label">参加プロジェクト</div>
+    <div class="dash-value">{{ project_count }}</div>
+  </a>
+
+  <a class="dash-card link-card" href="{{ url_for('projects.list_projects') }}">
+    <div class="dash-label">未完了タスク</div>
+    <div class="dash-value">{{ open_task_count }}</div>
+  </a>
+
+  {% if current_user.role == "admin" %}
+    <a class="dash-card link-card" href="{{ url_for('admin.list_users') }}">
+      <div class="dash-label">承認待ちユーザー</div>
+      <div class="dash-value">{{ pending_user_count }}</div>
+    </a>
+  {% endif %}
+</div>
+
+<div style="margin-top:16px;">
+  <a class="btn-back" href="{{ url_for('projects.list_projects') }}">← プロジェクト一覧へ</a>
+</div>
+{% endblock %}

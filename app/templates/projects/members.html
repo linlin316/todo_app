@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>メンバー管理：{{ project.name }}</h1>
+
+<h2>現在のメンバー</h2>
+<ul style="list-style: none; padding-left: 0;">
+{% for m in members %}
+  <li style="margin-bottom: 10px; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+    
+    <div style="margin-bottom: 6px;">
+      <strong>{{ m.user.name }}</strong>
+       ID:（{{ m.user.employee_id }})
+       現在：<b>{{ m.role_in_project }}</b>
+    </div>
+
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      
+      <form method="post"
+            action="{{ url_for('projects.update_project_member_role', project_id=project.id, pm_id=m.id) }}">
+        <select name="role_in_project">
+          <option value="member" {% if m.role_in_project == 'member' %}selected{% endif %}>member</option>
+          <option value="leader" {% if m.role_in_project == 'leader' %}selected{% endif %}>leader</option>
+        </select>
+        <button class="btn-dark" type="submit">変更</button>
+      </form>
+
+      <form method="post"
+            action="{{ url_for('projects.delete_project_member', project_id=project.id, pm_id=m.id) }}"
+            onsubmit="return confirm('本当に削除しますか？');">
+        <button class="btn-dark-outline" type="submit">削除</button>
+      </form>
+
+    </div>
+
+  </li>
+{% endfor %}
+</ul>
+
+<h3>メンバー追加</h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div>
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<form method="post">
+  <div>
+    <label>社員番号</label>
+    <br>
+    <input name="employee_id" type="text" inputmode="numeric" placeholder="例: 9999" required>
+  </div>
+
+  <div style="margin-top:10px;">
+    <label>役割</label><br>
+    <select name="role_in_project" style="padding:8px;">
+      <option value="member">member</option>
+      <option value="leader">leader</option>
+    </select>
+  </div>
+
+  <div style="margin-top:10px;">
+    <button class="btn-dark" type="submit">追加</button>
+  </div>
+</form>
+
+<p style="margin-top:16px;">
+  <a href="{{ url_for('projects.list_projects') }}" class="btn-back">
+    ← プロジェクト一覧へ
+</a>
+</p>
+{% endblock %}

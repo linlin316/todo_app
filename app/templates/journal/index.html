@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}日誌{% endblock %}
+
+{% block content %}
+<h1>日誌：{{ project.name }}</h1>
+{% if current_user.role == "admin" %}
+  <form method="post"
+        action="{{ url_for('projects.clear_project_journal', project_id=project.id) }}"
+        onsubmit="return confirm('日記を削除します。よろしいですか？');"
+        style="display:inline;">
+        <div class="form-actions">
+    <button type="submit" class="btn-danger">日記削除</button>
+    </div>
+  </form>
+{% endif %}
+<div class="card" style="margin-bottom:12px;">
+  <form method="post">
+    <label>記録</label><br>
+
+    <div style="margin:8px 0;">
+      <label style="font-size:14px; color:#555;">タスク</label><br>
+      <select name="task_id" class="input">
+        <option value="">共通（タスクなし）</option>
+        {% for t in tasks %}
+          <option value="{{ t.id }}">#{{ t.id }} {{ t.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <textarea name="content" rows="4" class="input" style="width:100%;" placeholder="内容を入力..."></textarea>
+
+    <div style="margin-top:10px;">
+      <button type="submit" class="btn-dark">保存</button>
+    </div>
+
+    {% if error %}
+      <div class="flash flash-error" style="margin-top:10px;">{{ error }}</div>
+    {% endif %}
+  </form>
+</div>
+
+{% if grouped|length == 0 %}
+  <div class="card">
+    <p style="margin:0; color:#666;">まだ記録がありません。</p>
+  </div>
+{% else %}
+  {% for task_name, items in grouped.items() %}
+    <h2 style="margin:18px 0 8px 0; font-size:18px;">
+      {{ task_name }}（{{ items|length }}）
+    </h2>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      {% for e in items %}
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
+            <div style="font-weight:900;">{{ e.who }}</div>
+            <div style="color:#666; font-size:13px;">{{ e.ts }}</div>
+          </div>
+
+          <details>
+              <summary style="cursor:pointer; color:#0b63d1; font-weight:700;">本文を表示</summary>
+              <div style="white-space:pre-wrap; line-height:1.6; margin-top:8px;">{{ e.body }}</div>
+          </details>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% endblock %}

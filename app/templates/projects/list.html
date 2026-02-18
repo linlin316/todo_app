@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}プロジェクト一覧{% endblock %}
+
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+  <h1 style="margin:0;">プロジェクト一覧</h1>
+  <a class="nav-btn" href="{{ url_for('projects.create_project') }}">＋ 新規作成</a>
+</div>
+
+<div style="margin-top:16px;">
+  {% if projects|length == 0 %}
+    <div class="card">
+      <p style="margin:0;">プロジェクトがありません。</p>
+    </div>
+  {% else %}
+    <div class="grid">
+      {% for p in projects %}
+        <div class="card">
+
+          <h2 class="card-title">{{ p.name }}</h2>
+
+          {% if p.description %}
+            <p class="card-desc">{{ p.description }}</p>
+          {% else %}
+            <p class="card-desc" style="color:#888;">（説明なし）</p>
+          {% endif %}
+          <div class="project-progress">
+            <span class="stat stat-todo">未着手 {{ project_stats[p.id]["todo"] }}</span>
+            <span class="stat stat-doing">進行中 {{ project_stats[p.id]["doing"] }}</span>
+            <span class="stat stat-done">完了 {{ project_stats[p.id]["done"] }}</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn-dark-outline" href="{{ url_for('projects.list_tasks', project_id=p.id) }}">タスク</a>
+            <a class="btn-dark-outline" href="{{ url_for('projects.project_members', project_id=p.id) }}">メンバー</a>
+            <a class="btn-dark-outline" href="{{ url_for('projects.project_journal', project_id=p.id) }}">日誌</a>
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

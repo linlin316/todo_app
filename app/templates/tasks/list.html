@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>タスク一覧：{{ project.name }}</h2>
+
+<p><a href="{{ url_for('projects.list_projects') }}" class="btn-back">
+    ← プロジェクト一覧へ
+</a></p>
+<p><a href="/projects/{{ project.id }}/tasks/create" class="btn-back">＋ タスク追加</a></p>
+<p><a class="btn btn-reset" href="/projects/{{ project.id }}/journal">記録</a></p>
+
+<div class="board">
+
+  <!-- TODO -->
+  <section class="column col-todo">
+    <div class="column-title">Todo</div>
+    <ul class="task-list">
+      {% for t in tasks if t.status == "todo" %}
+        <li class="task-card">
+          <div class="task-header">
+            <form method="post" action="/projects/{{ project.id }}/tasks/{{ t.id }}/status" style="display:inline;">
+              <button class="btn btn-start" name="action" value="start">開始</button>
+            </form>
+
+            <span class="status-badge status-todo">todo</span>
+            <strong class="task-title">{{ t.title }}</strong>
+
+            {% if t.due_date %}
+              {% set days_left = (t.due_date - today).days %}
+               期限：
+                <span class="{% if days_left < 0 %}due-overdue{% elif days_left <= 3 %}due-soon{% elif days_left <= 7 %}due-warn{% endif %}">
+                  {{ t.due_date.strftime("%m/%d") }}
+                  {% if days_left < 0 %}（{{ -days_left }}日遅れ）
+                  {% elif days_left == 0 %}（今日まで）
+                  {% elif days_left <= 7 %}（あと{{ days_left }}日）
+                  {% endif %}
+                </span>
+            {% endif %}
+          </div>
+
+          <div class="task-meta">
+            優先度：{{ t.priority }}<br>
+            完了時間：{% if t.done_at %}{{ t.done_at|jst }}{% else %}—{% endif %}<br>
+            {% if t.description %}{{ t.description }}{% endif %}
+          </div>
+        </li>
+      {% else %}
+        <li style="color:#777;">（Todo はありません）</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- DOING -->
+  <section class="column col-doing">
+    <div class="column-title">Doing</div>
+    <ul class="task-list">
+      {% for t in tasks if t.status == "doing" %}
+        <li class="task-card">
+          <div class="task-header">
+            <form method="post" action="/projects/{{ project.id }}/tasks/{{ t.id }}/status" style="display:inline;">
+              <button class="btn btn-done" name="action" value="done">完了</button>
+            </form>
+
+            <span class="status-badge status-doing">doing</span>
+            <strong class="task-title">{{ t.title }}</strong>
+
+            {% if t.due_date %}
+              {% set days_left = (t.due_date - today).days %}
+               期限：
+                <span class="{% if days_left < 0 %}due-overdue{% elif days_left <= 3 %}due-soon{% elif days_left <= 7 %}due-warn{% endif %}">
+                  {{ t.due_date.strftime("%m/%d") }}
+                  {% if days_left < 0 %}（{{ -days_left }}日遅れ）
+                  {% elif days_left == 0 %}（今日まで）
+                  {% elif days_left <= 7 %}（あと{{ days_left }}日）
+                  {% endif %}
+                </span>
+            {% endif %}
+          </div>
+
+          <div class="task-meta">
+            優先度：{{ t.priority }}<br>
+            完了時間：{% if t.done_at %}{{ t.done_at|jst }}{% else %}—{% endif %}<br>
+            {% if t.description %}{{ t.description }}{% endif %}
+          </div>
+        </li>
+      {% else %}
+        <li style="color:#777;">（Doing はありません）</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- DONE -->
+  <section class="column col-done">
+    <div class="column-title">Done</div>
+    <ul class="task-list">
+      {% for t in tasks if t.status == "done" %}
+        <li class="task-card task-done">
+          <div class="task-header">
+            <form method="post" action="/projects/{{ project.id }}/tasks/{{ t.id }}/status" style="display:inline;">
+              <button class="btn btn-reset" name="action" value="reset">戻す</button>
+            </form>
+
+            <span class="status-badge status-done">done</span>
+            <strong class="task-title">{{ t.title }}</strong>
+
+            {% if t.due_date %}
+               期限：{{ t.due_date.strftime("%m/%d") }}
+            {% endif %}
+          </div>
+
+          <div class="task-meta">
+            優先度：{{ t.priority }}<br>
+            完了時間：
+            {% if t.done_at %}{{ t.done_at|jst }}{% else %}—{% endif %}<br>
+            {% if t.description %}{{ t.description }}{% endif %}
+          </div>
+        </li>
+      {% else %}
+        <li style="color:#777;">（Done はありません）</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+</div>
+{% endblock %}

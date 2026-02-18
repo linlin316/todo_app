@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}ログイン{% endblock %}
+
+{% block content %}
+<h1>ログイン</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, msg in messages %}
+      <p style="color:#0066cc;">{{ msg }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+<form method="post">
+  <div style="margin: 8px 0;">
+    <label for="employee_id">社員番号</label>
+    <input
+      id="employee_id"
+      name="employee_id"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      autocomplete="username"
+      required
+    >
+  </div>
+
+  <div style="margin: 8px 0;">
+    <label>パスワード</label><br/>
+    <input name="password" type="password" required style="width:100%; padding:8px;">
+  </div>
+
+  <button type="submit" style="padding:8px 16px;">ログイン</button>
+</form>
+<hr>
+<p>
+  アカウントをお持ちでない方：
+  <a href="{{ url_for('auth.signup') }}">アカウント作成（申請）</a>
+</p>
+{% endblock %}

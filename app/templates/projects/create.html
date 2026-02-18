@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>プロジェクト作成</h2>
+
+<form method="post">
+  <div>
+    <label>名前</label><br>
+    <input name="name" required style="width:100%; padding:8px;">
+  </div>
+
+  <div style="margin-top:10px;">
+    <label>説明</label><br>
+    <textarea name="description" style="width:100%; padding:8px;"></textarea>
+  </div>
+
+  <div class="form-actions" style="margin-top:10px;">
+    <button class="btn btn-dark" type="submit">作成</button>
+    <a href="/projects" class="btn btn-back">← 戻る</a>
+  </div>
+</form>
+{% endblock %}
